@@ -1,3 +1,5 @@
+import { BioDockVisual } from "@/components/biodock-visual";
+import { NeuroCoreVisual } from "@/components/neurocore-visual";
 import type { ProjectKind } from "@/lib/site-content";
 
 export function ProjectVisual({ kind }: { kind: ProjectKind }) {
@@ -18,59 +20,11 @@ export function ProjectVisual({ kind }: { kind: ProjectKind }) {
 }
 
 function NeuroVisual() {
-  return (
-    <svg viewBox="0 0 420 300" className="h-full w-full" role="img" aria-label="IMU signal trace">
-      <path
-        d="M52 230 C100 110 132 240 180 120 S270 70 330 170 392 136 402 92"
-        fill="none"
-        stroke="var(--accent)"
-        strokeWidth="3"
-      />
-      <path d="M72 70 h110 v110 h-110z" fill="none" stroke="rgba(255,255,255,.24)" />
-      <path d="M238 86 l72 34 -34 72 -72 -34z" fill="none" stroke="rgba(255,255,255,.34)" />
-      {[70, 120, 170, 220, 270, 320].map((x) => (
-        <path key={x} d={`M${x} 42 V258`} stroke="rgba(255,255,255,.07)" />
-      ))}
-    </svg>
-  );
+  return <NeuroCoreVisual />;
 }
 
 function BioVisual() {
-  return (
-    <svg viewBox="0 0 420 300" className="h-full w-full" role="img" aria-label="Molecular docking layers">
-      <path
-        d="M86 156 C118 70 206 58 258 108 S332 158 364 84"
-        fill="none"
-        stroke="rgba(255,255,255,.22)"
-        strokeLinecap="round"
-        strokeWidth="18"
-      />
-      <path
-        d="M116 188 C156 126 236 120 300 176"
-        fill="none"
-        stroke="var(--accent)"
-        strokeWidth="3"
-      />
-      {[
-        [128, 182],
-        [166, 145],
-        [214, 139],
-        [258, 158],
-        [302, 176],
-      ].map(([cx, cy]) => (
-        <circle
-          key={`${cx}-${cy}`}
-          cx={cx}
-          cy={cy}
-          r="9"
-          fill="rgba(110,183,255,.18)"
-          stroke="var(--accent)"
-        />
-      ))}
-      <path d="M54 238 h300" stroke="rgba(255,255,255,.12)" />
-      <path d="M54 238 h210" stroke="var(--accent)" strokeWidth="5" />
-    </svg>
-  );
+  return <BioDockVisual />;
 }
 
 function ChaiVisual() {
