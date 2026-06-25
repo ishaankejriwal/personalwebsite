@@ -55,16 +55,16 @@ function AnimatedAssemblyHero({ content }: Props) {
   const assemblyRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: assemblyRef,
-    offset: ["start start", "end start"],
+    offset: ["start start", "end end"],
   });
   const fragmentProgress = useSpring(scrollYProgress, { stiffness: 88, damping: 25, mass: 0.35 });
   const panelProgress = useSpring(scrollYProgress, { stiffness: 150, damping: 28, mass: 0.24 });
-  const titleOpacity = useTransform(panelProgress, [0, 0.08], [0.94, 1]);
-  const titleY = useTransform(panelProgress, [0, 0.14], [6, 0]);
-  const dashboardOpacity = useTransform(panelProgress, [0.12, 0.34], [0.04, 1]);
-  const dashboardY = useTransform(panelProgress, [0.12, 0.36], [34, 0]);
-  const scanlineOpacity = useTransform(panelProgress, [0.2, 0.42, 0.56], [0, 0.42, 0]);
-  const scanlineY = useTransform(panelProgress, [0.2, 0.56], ["0%", "100%"]);
+  const titleOpacity = useTransform(panelProgress, [0, 0.2], [0.94, 1]);
+  const titleY = useTransform(panelProgress, [0, 0.28], [6, 0]);
+  const dashboardOpacity = useTransform(panelProgress, [0.18, 0.62], [0.04, 1]);
+  const dashboardY = useTransform(panelProgress, [0.18, 0.68], [34, 0]);
+  const scanlineOpacity = useTransform(panelProgress, [0.34, 0.72, 0.94], [0, 0.42, 0]);
+  const scanlineY = useTransform(panelProgress, [0.34, 0.94], ["0%", "100%"]);
 
   return (
     <HeroShell assemblyRef={assemblyRef}>
@@ -124,9 +124,9 @@ function HeroShell({
     <section
       ref={assemblyRef}
       aria-labelledby="intro-title"
-      className="relative min-h-[145vh] overflow-hidden px-5 sm:min-h-[165vh] sm:px-8 lg:px-12"
+      className="relative min-h-[132vh] overflow-hidden px-5 sm:min-h-[150vh] sm:px-8 lg:px-12"
     >
-      <div className="sticky top-0 mx-auto flex min-h-screen max-w-7xl flex-col justify-center py-14 sm:py-16">
+      <div className="sticky top-0 mx-auto flex h-screen max-w-7xl flex-col justify-center py-14 sm:py-16">
         <div className="absolute left-5 top-6 z-20 flex items-center gap-3 text-[0.68rem] uppercase tracking-[0.26em] text-[color:var(--muted)] sm:left-8 lg:left-12">
           <span className="h-px w-10 bg-[color:var(--accent)]" />
           Ishaan Kejriwal / Field Notes
@@ -221,11 +221,11 @@ function SystemFragment({
 }) {
   const position = fragmentPositions[index % fragmentPositions.length];
   const dock = dockPositions[index % dockPositions.length];
-  const x = useTransform(progress, [0, 0.5], [position.x, dock.x]);
-  const y = useTransform(progress, [0, 0.5], [position.y, dock.y]);
-  const rotate = useTransform(progress, [0, 0.5], [position.r, 0]);
-  const opacity = useTransform(progress, [0, 0.16, 0.5, 0.7], [0.42, 0.82, 0.34, 0.08]);
-  const scale = useTransform(progress, [0, 0.5], [1, 0.74]);
+  const x = useTransform(progress, [0, 0.78], [position.x, dock.x]);
+  const y = useTransform(progress, [0, 0.78], [position.y, dock.y]);
+  const rotate = useTransform(progress, [0, 0.78], [position.r, 0]);
+  const opacity = useTransform(progress, [0, 0.26, 0.78, 0.96], [0.42, 0.82, 0.34, 0.08]);
+  const scale = useTransform(progress, [0, 0.78], [1, 0.74]);
 
   return (
     <motion.div

@@ -14,7 +14,7 @@ export function ProjectModule({ project }: { project: Project }) {
   return (
     <article
       id={project.kind}
-      className="instrument-panel grid min-h-[28rem] overflow-hidden rounded-[6px] lg:grid-cols-[0.94fr_1.06fr]"
+      className="instrument-panel grid min-h-[28rem] scroll-mt-8 overflow-hidden rounded-[6px] lg:grid-cols-[0.94fr_1.06fr]"
     >
       <div className="flex flex-col justify-between p-6 sm:p-8">
         <div>

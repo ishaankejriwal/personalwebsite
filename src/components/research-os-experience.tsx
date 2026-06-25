@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { AssemblyHero } from "@/components/assembly-hero";
+import { CommandPalette } from "@/components/command-palette";
 import { ProjectModule } from "@/components/project-module";
 import { SectionHeader } from "@/components/section-header";
 import type { SiteContent } from "@/lib/site-content";
@@ -12,6 +13,7 @@ export function ResearchOSExperience({ content }: Props) {
   return (
     <main className="relative isolate min-h-screen overflow-x-clip">
       <div className="fine-grid pointer-events-none fixed inset-0 -z-10 opacity-70" />
+      <CommandPalette />
       <AssemblyHero content={content} />
       <RunningSystems content={content} />
       <ResearchLog content={content} />
@@ -23,9 +25,9 @@ export function ResearchOSExperience({ content }: Props) {
 function RunningSystems({ content }: Props) {
   return (
     <section
-      id="systems"
+      id="projects"
       aria-labelledby="systems-title"
-      className="mx-auto max-w-7xl px-5 py-24 sm:px-8 lg:px-12"
+      className="mx-auto max-w-7xl scroll-mt-8 px-5 py-24 sm:px-8 lg:px-12"
     >
       <SectionHeader
         id="systems-title"
@@ -45,10 +47,11 @@ function RunningSystems({ content }: Props) {
 function ResearchLog({ content }: Props) {
   return (
     <section
-      id="notes"
+      id="research"
       aria-labelledby="notes-title"
-      className="mx-auto max-w-7xl px-5 py-24 sm:px-8 lg:px-12"
+      className="relative mx-auto max-w-7xl scroll-mt-8 px-5 py-24 sm:px-8 lg:px-12"
     >
+      <span id="writing" className="absolute top-0" aria-hidden="true" />
       <SectionHeader
         id="notes-title"
         eyebrow="Research log"
