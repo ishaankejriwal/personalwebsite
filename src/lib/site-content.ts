@@ -21,7 +21,7 @@ export const siteContent = {
   introLine: "Loose signals. Working systems.",
   name: "Ishaan Kejriwal",
   position:
-    "I build AI, hardware, research, and startup systems from measured artifacts instead of portfolio theater.",
+    "I build AI, hardware, research, and startup systems around measurable artifacts: traces, evals, prototypes, and field data.",
   fragments: [
     "IMU drift: 2.4 deg",
     "ligand pose / score stack",

@@ -72,7 +72,11 @@ function BioVisual() {
 
 function ChaiVisual() {
   return (
-    <div className="grid h-full grid-cols-[1fr_0.78fr] gap-4" aria-label="Healthcare AI evaluation matrix">
+    <div
+      className="grid h-full grid-cols-[1fr_0.78fr] gap-4"
+      role="img"
+      aria-label="Healthcare AI evaluation matrix"
+    >
       <div className="grid grid-cols-4 gap-2">
         {Array.from({ length: 24 }).map((_, index) => (
           <span
@@ -120,7 +124,11 @@ function NasaVisual() {
 
 function SkillifyVisual() {
   return (
-    <div className="flex h-full items-center justify-center" aria-label="Marketplace application flow">
+    <div
+      className="flex h-full items-center justify-center"
+      role="img"
+      aria-label="Marketplace application flow"
+    >
       <div className="grid w-full max-w-md grid-cols-3 items-center gap-4">
         {["profile", "match", "apply"].map((label, index) => (
           <div
@@ -140,7 +148,11 @@ function SkillifyVisual() {
 
 function ExperimentsVisual() {
   return (
-    <div className="grid h-full content-center gap-3" aria-label="Applied AI prototype queue">
+    <div
+      className="grid h-full content-center gap-3"
+      role="img"
+      aria-label="Applied AI prototype queue"
+    >
       {["input audit", "model pass", "constraint test", "ship note"].map((item, index) => (
         <div
           key={item}

@@ -35,10 +35,10 @@ export function ResearchOSExperience({ content }: Props) {
     offset: ["start start", "end start"],
   });
   const progress = useSpring(scrollYProgress, { stiffness: 90, damping: 24, mass: 0.35 });
-  const nameOpacity = useTransform(progress, [0.08, 0.22], [0, 1]);
-  const nameY = useTransform(progress, [0.08, 0.24], [24, 0]);
-  const dashboardOpacity = useTransform(progress, [0.28, 0.5], [0, 1]);
-  const dashboardY = useTransform(progress, [0.28, 0.58], [64, 0]);
+  const nameOpacity = useTransform(progress, [0, 0.12], [0.86, 1]);
+  const nameY = useTransform(progress, [0, 0.16], [8, 0]);
+  const dashboardOpacity = useTransform(progress, [0.08, 0.28], [0.18, 1]);
+  const dashboardY = useTransform(progress, [0.08, 0.34], [28, 0]);
   const revealStyle = reduceMotion ? undefined : { opacity: nameOpacity, y: nameY };
   const dashboardStyle = reduceMotion ? undefined : { opacity: dashboardOpacity, y: dashboardY };
 
@@ -78,15 +78,15 @@ function AssemblyHero({
     <section
       ref={assemblyRef}
       aria-labelledby="intro-title"
-      className="relative min-h-[180vh] px-5 sm:px-8 lg:px-12"
+      className="relative min-h-[145vh] px-5 sm:min-h-[165vh] sm:px-8 lg:px-12"
     >
-      <div className="sticky top-0 mx-auto flex min-h-screen max-w-7xl flex-col justify-center py-16">
+      <div className="sticky top-0 mx-auto flex min-h-screen max-w-7xl flex-col justify-center py-14 sm:py-16">
         <div className="absolute left-5 top-6 z-20 flex items-center gap-3 text-[0.68rem] uppercase tracking-[0.26em] text-[color:var(--muted)] sm:left-8 lg:left-12">
           <span className="h-px w-10 bg-[color:var(--accent)]" />
           Research Desk OS
         </div>
 
-        <div className="relative min-h-[72vh]">
+        <div className="relative min-h-[76vh] sm:min-h-[72vh]">
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
             {content.fragments.map((fragment, index) => (
               <SystemFragment
@@ -99,7 +99,7 @@ function AssemblyHero({
             ))}
           </div>
 
-          <div className="relative z-10 grid min-h-[72vh] items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="relative z-10 grid min-h-[76vh] items-center gap-8 sm:min-h-[72vh] lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
             <div className="max-w-2xl">
               <p className="mb-6 font-mono text-xs uppercase tracking-[0.32em] text-[color:var(--accent)]">
                 {content.introLine}
@@ -119,26 +119,26 @@ function AssemblyHero({
               </motion.p>
             </div>
 
-            <motion.nav
+              <motion.nav
               style={dashboardStyle}
               className="instrument-panel rounded-[6px] p-3"
               aria-label="Assembled project navigation"
             >
-              <div className="grid gap-2 sm:grid-cols-2">
+              <div className="grid grid-cols-2 gap-2">
                 {content.projects.map((project) => (
                   <a
                     key={project.name}
                     href={`#${project.kind}`}
-                    className="min-h-40 rounded-[4px] border border-white/[0.07] bg-white/[0.025] p-4 transition duration-200 hover:border-[color:var(--accent)] hover:bg-[color:var(--accent-soft)] focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]"
+                    className="min-h-28 rounded-[4px] border border-white/[0.07] bg-white/[0.025] p-3 transition duration-200 hover:border-[color:var(--accent)] hover:bg-[color:var(--accent-soft)] focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] sm:min-h-36 sm:p-4"
                   >
-                    <div className="mb-6 flex items-center justify-between font-mono text-[0.68rem] uppercase tracking-[0.2em] text-[color:var(--muted)]">
+                    <div className="mb-4 flex items-center justify-between gap-3 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-[color:var(--muted)] sm:mb-6 sm:text-[0.68rem] sm:tracking-[0.2em]">
                       <span>{projectNumbers[project.kind]}</span>
-                      <span>{project.metric}</span>
+                      <span className="hidden sm:inline">{project.metric}</span>
                     </div>
-                    <h2 className="text-xl font-medium tracking-[-0.03em] text-white">
+                    <h2 className="text-base font-medium tracking-[-0.03em] text-white sm:text-xl">
                       {project.name}
                     </h2>
-                    <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">
+                    <p className="mt-2 text-xs leading-5 text-[color:var(--muted)] sm:mt-3 sm:text-sm sm:leading-6">
                       {project.artifact}
                     </p>
                   </a>
@@ -167,14 +167,16 @@ function SystemFragment({
   const x = useTransform(progress, [0, 0.48], [position.x, `${(index % 4) * 8 - 12}vw`]);
   const y = useTransform(progress, [0, 0.48], [position.y, `${Math.floor(index / 4) * 5 - 5}vh`]);
   const rotate = useTransform(progress, [0, 0.48], [position.r, 0]);
-  const opacity = useTransform(progress, [0, 0.15, 0.58], [0.58, 0.95, 0.2]);
+  const opacity = useTransform(progress, [0, 0.15, 0.58], [0.44, 0.8, 0.16]);
   const scale = useTransform(progress, [0, 0.48], [1, 0.82]);
 
   return (
     <motion.div
       aria-hidden="true"
       style={reduceMotion ? undefined : { x, y, rotate, opacity, scale }}
-      className="absolute rounded-[4px] border border-white/[0.12] bg-[#0c1118]/80 px-3 py-2 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-slate-300 shadow-2xl shadow-black/20 backdrop-blur-[2px] sm:text-xs"
+      className={`absolute rounded-[4px] border border-white/[0.12] bg-[#0c1118]/90 px-3 py-2 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-slate-300 shadow-lg shadow-black/20 sm:text-xs ${
+        index > 3 ? "hidden sm:block" : ""
+      }`}
     >
       {text}
     </motion.div>
@@ -191,7 +193,7 @@ function RunningSystems({ content }: Props) {
       <SectionHeader
         id="systems-title"
         eyebrow="Running systems"
-        title="Projects behave like instruments, not cards."
+        title="Projects as working instruments."
         description="Each module uses the project artifact as its interface: traces, matrices, score layers, orbit paths, and flows."
       />
       <div className="mt-12 grid gap-5 lg:grid-cols-2">
@@ -256,7 +258,7 @@ function ContactPanel() {
             id="contact-title"
             className="mt-5 max-w-2xl text-4xl font-semibold tracking-[-0.04em] text-white sm:text-5xl"
           >
-            Send the artifact, not the pitch.
+            Send a signal worth building around.
           </h2>
         </div>
         <div className="flex flex-wrap gap-3">
