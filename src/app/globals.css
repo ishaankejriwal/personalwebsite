@@ -74,6 +74,12 @@ a {
   mask-image: linear-gradient(to bottom, transparent, black 18%, black 74%, transparent);
 }
 
+@media (max-width: 640px), (prefers-reduced-motion: reduce) {
+  .fine-grid {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

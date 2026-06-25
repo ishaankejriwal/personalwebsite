@@ -1,17 +1,20 @@
-import type { ReactNode } from "react";
 import type { ProjectKind } from "@/lib/site-content";
 
 export function ProjectVisual({ kind }: { kind: ProjectKind }) {
-  const visuals: Record<ProjectKind, ReactNode> = {
-    neuro: <NeuroVisual />,
-    bio: <BioVisual />,
-    chai: <ChaiVisual />,
-    nasa: <NasaVisual />,
-    skillify: <SkillifyVisual />,
-    experiments: <ExperimentsVisual />,
-  };
-
-  return visuals[kind];
+  switch (kind) {
+    case "neuro":
+      return <NeuroVisual />;
+    case "bio":
+      return <BioVisual />;
+    case "chai":
+      return <ChaiVisual />;
+    case "nasa":
+      return <NasaVisual />;
+    case "skillify":
+      return <SkillifyVisual />;
+    case "experiments":
+      return <ExperimentsVisual />;
+  }
 }
 
 function NeuroVisual() {
@@ -88,12 +91,12 @@ function ChaiVisual() {
           />
         ))}
       </div>
-      <div className="relative">
+      <div className="relative min-w-0">
         {[0, 1, 2].map((item) => (
           <div
             key={item}
-            className="absolute h-40 w-32 rounded-[4px] border border-white/[0.12] bg-[#141b25]"
-            style={{ left: item * 24, top: item * 34 }}
+            className="absolute h-[45%] w-[70%] max-w-32 rounded-[4px] border border-white/[0.12] bg-[#141b25]"
+            style={{ left: `${item * 13}%`, top: `${item * 18}%` }}
           />
         ))}
       </div>

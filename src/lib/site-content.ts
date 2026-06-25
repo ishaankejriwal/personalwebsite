@@ -18,10 +18,10 @@ export type ResearchNote = {
 };
 
 export const siteContent = {
-  introLine: "Loose signals. Working systems.",
+  introLine: "Raw evidence. Built systems.",
   name: "Ishaan Kejriwal",
   position:
-    "I build AI, hardware, research, and startup systems around measurable artifacts: traces, evals, prototypes, and field data.",
+    "I build where models meet the physical world: sensor traces, healthcare evals, docking workflows, climate data, and products people can actually use.",
   fragments: [
     "IMU drift: 2.4 deg",
     "ligand pose / score stack",
@@ -41,7 +41,7 @@ export const siteContent = {
       kind: "neuro",
       name: "NeuroCore",
       label: "Hardware / rehabilitation",
-      summary: "Sensor-backed brace work for posture, motion, and feedback loops.",
+      summary: "A sensor-backed brace project for measuring motion clearly enough to guide rehabilitation feedback.",
       artifact: "IMU trace + orientation calibration",
       detail: "A hardware system shaped around measured movement, not abstract wellness claims.",
       metric: "motion signal",
@@ -50,7 +50,7 @@ export const siteContent = {
       kind: "bio",
       name: "BioDock AI",
       label: "Bio AI / docking",
-      summary: "A workflow for molecular docking exploration and ranked fit inspection.",
+      summary: "A docking workflow for comparing ligand poses, scores, and fit without burying the decision in model output.",
       artifact: "ligand pose + score layers",
       detail: "Scientific interface patterns for turning dense model output into decisions.",
       metric: "binding fit",
@@ -59,7 +59,7 @@ export const siteContent = {
       kind: "chai",
       name: "CHAI",
       label: "Healthcare AI evaluation",
-      summary: "Evaluation work around healthcare AI behavior, documents, and failure modes.",
+      summary: "Healthcare AI evaluation work focused on what models miss, overstate, or fail to justify in clinical documents.",
       artifact: "rubric grid + document stack",
       detail: "A practical lens on whether AI systems behave reliably in clinical contexts.",
       metric: "eval matrix",
@@ -77,7 +77,7 @@ export const siteContent = {
       kind: "skillify",
       name: "Skillify",
       label: "Startup system",
-      summary: "Marketplace and application-flow thinking for matching people to opportunity.",
+      summary: "A marketplace experiment around helping people find, compare, and apply to better-fit opportunities.",
       artifact: "pipeline map",
       detail: "A product system framed around flow, matching, and practical user outcomes.",
       metric: "conversion path",
@@ -86,7 +86,7 @@ export const siteContent = {
       kind: "experiments",
       name: "Applied AI Projects",
       label: "GTRI / experiments",
-      summary: "Small applied systems for testing AI against real constraints.",
+      summary: "Applied AI prototypes built to test whether an idea survives messy inputs, narrow time, and real users.",
       artifact: "prototype queue",
       detail: "The working bench for experiments that are useful before they are polished.",
       metric: "active tests",
