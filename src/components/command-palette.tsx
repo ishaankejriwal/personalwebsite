@@ -15,7 +15,7 @@ const targets: PaletteTarget[] = [
   { label: "Projects", href: "#projects", group: "section", meta: "running systems" },
   { label: "Research", href: "#research", group: "section", meta: "field log" },
   { label: "Writing", href: "#writing", group: "section", meta: "notes" },
-  { label: "Contact", href: "#contact", group: "section", meta: "open channel" },
+  { label: "Contact", href: "#contact", group: "section", meta: "send note" },
   { label: "NeuroCore", href: "#neuro", group: "project", meta: "motion signal" },
   { label: "BioDock AI", href: "#bio", group: "project", meta: "binding fit" },
   { label: "CHAI", href: "#chai", group: "project", meta: "eval matrix" },
@@ -29,6 +29,7 @@ export function CommandPalette() {
   const [activeIndex, setActiveIndex] = useState(0);
   const reduceMotion = useReducedMotion();
   const inputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const titleId = useId();
   const listId = useId();
@@ -111,7 +112,31 @@ export function CommandPalette() {
       event.preventDefault();
       jumpToTarget(filteredTargets[activeIndex]);
     }
+  }
 
+  function onDialogKeyDown(event: ReactKeyboardEvent<HTMLDivElement>) {
+    if (event.key !== "Tab") {
+      return;
+    }
+
+    const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+    );
+
+    if (!focusable?.length) {
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
   }
 
   return (
@@ -143,6 +168,7 @@ export function CommandPalette() {
             }}
           >
             <motion.div
+              ref={dialogRef}
               role="dialog"
               aria-modal="true"
               aria-labelledby={titleId}
@@ -151,13 +177,14 @@ export function CommandPalette() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={reduceMotion ? undefined : { opacity: 0, y: 10, scale: 0.985 }}
               transition={{ duration: 0.18, ease: "easeOut" }}
+              onKeyDown={onDialogKeyDown}
               onMouseDown={(event) => event.stopPropagation()}
             >
               <div className="border-b border-white/[0.08] p-4 sm:p-5">
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <p className="font-mono text-[0.64rem] uppercase tracking-[0.24em] text-[color:var(--accent)]">
-                      Research OS
+                      Field notes
                     </p>
                     <h2
                       id={titleId}
@@ -188,7 +215,7 @@ export function CommandPalette() {
                   aria-activedescendant={
                     filteredTargets[activeIndex] ? `${listId}-${activeIndex}` : undefined
                   }
-                  aria-label="Search Research OS destinations"
+                  aria-label="Search page destinations"
                   className="mt-5 w-full rounded-[4px] border border-white/[0.1] bg-black/24 px-4 py-3 text-base text-white outline-none transition-colors placeholder:text-[color:var(--muted)] focus:border-[color:var(--accent)] focus:ring-2 focus:ring-[color:var(--accent-soft)]"
                   placeholder="Search projects, research, writing, contact..."
                 />
@@ -197,7 +224,7 @@ export function CommandPalette() {
               <div
                 id={listId}
                 role="listbox"
-                aria-label="Research OS destinations"
+                aria-label="Page destinations"
                 className="max-h-[60vh] overflow-y-auto p-2"
               >
                 {filteredTargets.length ? (

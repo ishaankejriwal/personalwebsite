@@ -32,8 +32,8 @@ function RunningSystems({ content }: Props) {
       <SectionHeader
         id="systems-title"
         eyebrow="Running systems"
-        title="Work that leaves evidence behind."
-        description="A map of the things I have been building across health, biology, climate, hardware, and applied AI."
+        title="Projects with receipts."
+        description="Work across health, biology, climate, hardware, and applied AI, shown through the artifacts each project leaves behind."
       />
       <div className="mt-12 grid gap-5 lg:grid-cols-2">
         {content.projects.map((project) => (
@@ -55,8 +55,8 @@ function ResearchLog({ content }: Props) {
       <SectionHeader
         id="notes-title"
         eyebrow="Research log"
-        title="Notes from the edge of the work."
-        description="Short observations on evaluation, sensors, interfaces, and the parts of a project that decide whether it works."
+        title="Notes from the workbench."
+        description="Short observations on evaluation, sensors, interfaces, and the details that decide whether a project holds up."
       />
       <div className="mt-12 divide-y divide-white/[0.08] border-y border-white/[0.08]">
         {content.notes.map((note) => (
@@ -101,7 +101,7 @@ function ContactPanel() {
             id="contact-title"
             className="mt-5 max-w-2xl text-4xl font-semibold tracking-[-0.04em] text-white sm:text-5xl"
           >
-            Send something concrete. I read thoughtful notes.
+            Send the concrete version. I read careful notes.
           </h2>
         </div>
         <div className="flex flex-wrap gap-3">

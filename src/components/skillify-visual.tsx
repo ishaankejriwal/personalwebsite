@@ -19,12 +19,12 @@ export function SkillifyVisual() {
       tabIndex={0}
     >
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(170,190,215,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(170,190,215,0.045)_1px,transparent_1px)] bg-[size:32px_32px]" />
-      <div className="pointer-events-none absolute inset-x-4 top-4 flex items-center justify-between font-mono text-[0.62rem] uppercase tracking-[0.18em] text-[color:var(--muted)]">
+      <div className="pointer-events-none absolute inset-x-3 top-4 flex items-center justify-between gap-3 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-[color:var(--muted)] sm:inset-x-4">
         <span>Marketplace flow</span>
-        <span className="text-[color:var(--accent)]">fit 0.76</span>
+        <span className="shrink-0 text-[color:var(--accent)]">fit 0.76</span>
       </div>
 
-      <div className="relative grid h-full min-h-64 grid-cols-3 gap-3 p-4 pt-14">
+      <div className="relative grid h-full min-h-[36rem] auto-rows-fr grid-cols-1 gap-2 p-3 pt-14 min-[520px]:min-h-64 min-[520px]:grid-cols-3 min-[520px]:gap-3 min-[520px]:p-4 min-[520px]:pt-14">
         <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 420 300" aria-hidden="true">
           <path
             d="M118 116 C156 104 172 104 208 112"
@@ -50,7 +50,7 @@ export function SkillifyVisual() {
         </svg>
 
         <motion.div
-          className="relative z-10 rounded-[4px] border border-white/[0.08] bg-white/[0.025] p-3"
+          className="relative z-10 min-w-0 rounded-[4px] border border-white/[0.08] bg-white/[0.025] p-3"
           initial={reduceMotion ? false : { opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.55 }}
@@ -65,7 +65,7 @@ export function SkillifyVisual() {
         </motion.div>
 
         <motion.div
-          className="relative z-10 rounded-[4px] border border-white/[0.1] bg-[#101722] p-3 shadow-2xl shadow-black/20"
+          className="relative z-10 min-w-0 rounded-[4px] border border-white/[0.1] bg-[#101722] p-3 shadow-2xl shadow-black/20"
           initial={reduceMotion ? false : { opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.55 }}
@@ -89,7 +89,7 @@ export function SkillifyVisual() {
         </motion.div>
 
         <motion.div
-          className="relative z-10 rounded-[4px] border border-white/[0.08] bg-white/[0.025] p-3"
+          className="relative z-10 min-w-0 rounded-[4px] border border-white/[0.08] bg-white/[0.025] p-3"
           initial={reduceMotion ? false : { opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.55 }}
@@ -128,10 +128,10 @@ function SignalRow({
   checked?: boolean;
 }) {
   return (
-    <div className="space-y-1.5">
-      <div className="flex items-center justify-between font-mono text-[0.55rem] uppercase tracking-[0.1em] text-slate-300">
-        <span className={active ? "text-[color:var(--accent)]" : ""}>{label}</span>
-        <span className={checked ? "text-[color:var(--accent)]" : "text-white/30"}>{checked ? "ok" : "--"}</span>
+    <div className="min-w-0 space-y-1.5">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 font-mono text-[0.55rem] uppercase tracking-[0.08em] text-slate-300">
+        <span className={`min-w-0 truncate ${active ? "text-[color:var(--accent)]" : ""}`}>{label}</span>
+        <span className={`shrink-0 tabular-nums ${checked ? "text-[color:var(--accent)]" : "text-white/30"}`}>{checked ? "ok" : "--"}</span>
       </div>
       <span className="block h-1 rounded-full bg-white/[0.08]">
         <span className="block h-1 rounded-full bg-white/25" style={{ width: `${width}%` }} />

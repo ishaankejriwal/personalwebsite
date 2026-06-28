@@ -74,6 +74,11 @@ a {
   mask-image: linear-gradient(to bottom, transparent, black 18%, black 74%, transparent);
 }
 
+.render-window {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 760px;
+}
+
 @media (max-width: 640px), (prefers-reduced-motion: reduce) {
   .fine-grid {
     display: none;

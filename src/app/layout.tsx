@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ishaan Kejriwal | Research OS",
+  title: "Ishaan Kejriwal | Field Notes",
   description:
-    "Projects and notes from Ishaan Kejriwal across AI, hardware, healthcare evaluation, climate research, and startups.",
+    "Projects and notes from Ishaan Kejriwal across AI, hardware, healthcare evaluation, climate research, and startup systems.",
 };
 
 export default function RootLayout({

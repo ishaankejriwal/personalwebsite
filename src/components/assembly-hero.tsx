@@ -148,6 +148,8 @@ function HeroContent({
   dashboardStyle?: MotionStyle;
   scanlineStyle?: MotionStyle;
 }) {
+  const reduceMotion = useReducedMotion();
+
   return (
     <div className="relative z-10 grid min-h-[76vh] items-center gap-8 sm:min-h-[72vh] lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
       <div className="max-w-2xl">
@@ -186,7 +188,7 @@ function HeroContent({
             <motion.a
               key={project.name}
               href={`#${project.kind}`}
-              whileHover={{ y: -2 }}
+              whileHover={reduceMotion ? undefined : { y: -2 }}
               transition={{ duration: 0.18, ease: "easeOut" }}
               className="group min-h-28 rounded-[4px] border border-white/[0.07] bg-white/[0.025] p-3 transition-colors duration-200 hover:border-[color:var(--accent)] hover:bg-[color:var(--accent-soft)] focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] sm:min-h-36 sm:p-4"
             >
