@@ -105,11 +105,11 @@ function ContactPanel() {
           </h2>
         </div>
         <div className="flex flex-wrap gap-3">
-          <ContactLink href="mailto:hello@example.com">Email</ContactLink>
-          <ContactLink href="https://www.linkedin.com" external>
+          <ContactLink href="mailto:ishaankejriwal1@gmail.com">Email</ContactLink>
+          <ContactLink href="https://www.linkedin.com/in/ishaankejriwal/" external>
             LinkedIn
           </ContactLink>
-          <ContactLink href="https://github.com" external>
+          <ContactLink href="https://github.com/ishaankejriwal" external>
             GitHub
           </ContactLink>
         </div>

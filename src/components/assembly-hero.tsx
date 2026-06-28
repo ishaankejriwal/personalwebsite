@@ -61,7 +61,7 @@ function AnimatedAssemblyHero({ content }: Props) {
   const panelProgress = useSpring(scrollYProgress, { stiffness: 150, damping: 28, mass: 0.24 });
   const titleOpacity = useTransform(panelProgress, [0, 0.2], [0.94, 1]);
   const titleY = useTransform(panelProgress, [0, 0.28], [6, 0]);
-  const dashboardOpacity = useTransform(panelProgress, [0.18, 0.62], [0.04, 1]);
+  const dashboardOpacity = useTransform(panelProgress, [0, 0.62], [0.2, 1]);
   const dashboardY = useTransform(panelProgress, [0.18, 0.68], [34, 0]);
   const scanlineOpacity = useTransform(panelProgress, [0.34, 0.72, 0.94], [0, 0.42, 0]);
   const scanlineY = useTransform(panelProgress, [0.34, 0.94], ["0%", "100%"]);
@@ -152,7 +152,12 @@ function HeroContent({
 
   return (
     <div className="relative z-10 grid min-h-[76vh] items-center gap-8 sm:min-h-[72vh] lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
-      <div className="max-w-2xl">
+      <motion.div
+        initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+        animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className="max-w-2xl"
+      >
         <p className="mb-6 font-mono text-xs uppercase tracking-[0.32em] text-[color:var(--accent)]">
           {content.introLine}
         </p>
@@ -169,45 +174,58 @@ function HeroContent({
         >
           {content.position}
         </motion.p>
-      </div>
+      </motion.div>
 
-      <motion.nav
-        style={dashboardStyle}
-        className="instrument-panel relative overflow-hidden rounded-[6px] p-3"
-        aria-label="Assembled project navigation"
+      <motion.div
+        initial={reduceMotion ? false : { opacity: 0, y: 14, scale: 0.985 }}
+        animate={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.75, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
       >
-        {scanlineStyle ? (
+        <motion.nav
+          style={dashboardStyle}
+          className="instrument-panel relative overflow-hidden rounded-[6px] p-3"
+          aria-label="Assembled project navigation"
+        >
+          <motion.span
+            aria-hidden="true"
+            initial={reduceMotion ? false : { opacity: 0.42, y: "-100%" }}
+            animate={reduceMotion ? undefined : { opacity: 0, y: "120%" }}
+            transition={{ duration: 1.1, delay: 0.24, ease: "easeOut" }}
+            className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[rgba(110,183,255,0.24)] to-transparent"
+          />
+          {scanlineStyle ? (
           <motion.span
             aria-hidden="true"
             style={scanlineStyle}
             className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[rgba(110,183,255,0.2)] to-transparent"
           />
-        ) : null}
-        <div className="grid grid-cols-2 gap-2">
-          {content.projects.map((project) => (
-            <motion.a
-              key={project.name}
-              href={`#${project.kind}`}
-              whileHover={reduceMotion ? undefined : { y: -2 }}
-              transition={{ duration: 0.18, ease: "easeOut" }}
-              className="group min-h-28 rounded-[4px] border border-white/[0.07] bg-white/[0.025] p-3 transition-colors duration-200 hover:border-[color:var(--accent)] hover:bg-[color:var(--accent-soft)] focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] sm:min-h-36 sm:p-4"
-            >
-              <div className="mb-4 flex items-center justify-between gap-3 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-[color:var(--muted)] sm:mb-6 sm:text-[0.68rem] sm:tracking-[0.2em]">
-                <span>{projectNumbers[project.kind]}</span>
-                <span className="hidden text-[color:var(--accent)] opacity-70 transition-opacity group-hover:opacity-100 sm:inline">
-                  {project.metric}
-                </span>
-              </div>
-              <h2 className="text-base font-medium tracking-[-0.03em] text-white sm:text-xl">
-                {project.name}
-              </h2>
-              <p className="mt-2 text-xs leading-5 text-[color:var(--muted)] sm:mt-3 sm:text-sm sm:leading-6">
-                {project.artifact}
-              </p>
-            </motion.a>
-          ))}
-        </div>
-      </motion.nav>
+          ) : null}
+          <div className="grid grid-cols-2 gap-2">
+            {content.projects.map((project) => (
+              <motion.a
+                key={project.name}
+                href={`#${project.kind}`}
+                whileHover={reduceMotion ? undefined : { y: -2 }}
+                transition={{ duration: 0.18, ease: "easeOut" }}
+                className="group min-h-28 rounded-[4px] border border-white/[0.07] bg-white/[0.025] p-3 transition-colors duration-200 hover:border-[color:var(--accent)] hover:bg-[color:var(--accent-soft)] focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] sm:min-h-36 sm:p-4"
+              >
+                <div className="mb-4 flex items-center justify-between gap-3 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-[color:var(--muted)] sm:mb-6 sm:text-[0.68rem] sm:tracking-[0.2em]">
+                  <span>{projectNumbers[project.kind]}</span>
+                  <span className="hidden text-[color:var(--accent)] opacity-70 transition-opacity group-hover:opacity-100 sm:inline">
+                    {project.metric}
+                  </span>
+                </div>
+                <h2 className="text-base font-medium tracking-[-0.03em] text-white sm:text-xl">
+                  {project.name}
+                </h2>
+                <p className="mt-2 text-xs leading-5 text-[color:var(--muted)] sm:mt-3 sm:text-sm sm:leading-6">
+                  {project.artifact}
+                </p>
+              </motion.a>
+            ))}
+          </div>
+        </motion.nav>
+      </motion.div>
     </div>
   );
 }
@@ -232,12 +250,19 @@ function SystemFragment({
   return (
     <motion.div
       aria-hidden="true"
-      style={{ x, y, rotate, opacity, scale }}
-      className={`absolute rounded-[4px] border border-white/[0.12] bg-[#0c1118]/90 px-3 py-2 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-slate-300 shadow-lg shadow-black/20 sm:text-xs ${
+      initial={{ opacity: 0, y: 10, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.62, delay: index * 0.035, ease: [0.22, 1, 0.36, 1] }}
+      className={`absolute ${
         index > 3 ? "hidden sm:block" : ""
       }`}
     >
-      {text}
+      <motion.div
+        style={{ x, y, rotate, opacity, scale }}
+        className="rounded-[4px] border border-white/[0.12] bg-[#0c1118]/90 px-3 py-2 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-slate-300 shadow-lg shadow-black/20 sm:text-xs"
+      >
+        {text}
+      </motion.div>
     </motion.div>
   );
 }

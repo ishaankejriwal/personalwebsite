@@ -21,7 +21,7 @@ export const siteContent = {
   introLine: "Start with the trace.",
   name: "Ishaan Kejriwal",
   position:
-    "I build at the messy edge where models meet real evidence: sensor traces, clinical evals, docking runs, climate data, and products people use in practice.",
+    "I build AI, hardware, and research tools that turn signals into usable systems.",
   fragments: [
     "IMU drift: 2.4 deg",
     "ligand pose / score stack",
