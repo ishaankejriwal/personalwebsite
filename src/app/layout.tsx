@@ -1,21 +1,35 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Bricolage_Grotesque, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
+  axes: ["opsz", "wdth"],
+  variable: "--font-bricolage",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrains = JetBrains_Mono({
   subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-jetbrains",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Ishaan Kejriwal | Field Notes",
+  title: "Ishaan Kejriwal",
   description:
-    "Projects and notes from Ishaan Kejriwal across AI, hardware, healthcare evaluation, climate research, and startup systems.",
+    "Four things I built, turned into toys you can play. A balance belt for kids with cerebral palsy, a Kalman filter you can try to out-forecast, a docking puzzle from a drug screening app, and the tests clinical AI has to pass.",
+  metadataBase: new URL("https://ishaankejriwal.com"),
+  openGraph: {
+    title: "Ishaan Kejriwal",
+    description: "Four things I built, turned into toys you can play.",
+    type: "website",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0e0e0e",
 };
 
 export default function RootLayout({
@@ -24,12 +38,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
-    >
-      <body className="h-full">{children}</body>
+    <html lang="en" className={`${bricolage.variable} ${jetbrains.variable}`}>
+      <body>{children}</body>
     </html>
   );
 }

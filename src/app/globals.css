@@ -1,97 +1,114 @@
 @import "tailwindcss";
 
+/* Each cabinet sets its own flat colours through CSS variables on the
+   section. These are the defaults for the shell. */
 :root {
-  --background: #07090d;
-  --foreground: #f3f7fb;
-  --muted: #8994a5;
-  --panel: #10151d;
-  --panel-strong: #151c26;
-  --line: rgba(170, 190, 215, 0.16);
-  --accent: #6eb7ff;
-  --accent-soft: rgba(110, 183, 255, 0.16);
+  --bg: #f6f4ee;
+  --ink: #0e0e0e;
+  --accent: #ff6a45;
+  --dim: rgba(14, 14, 14, 0.3);
+  color-scheme: light;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-* {
-  box-sizing: border-box;
+  --color-bg: var(--bg);
+  --color-ink: var(--ink);
+  --color-accent: var(--accent);
+  --color-dim: var(--dim);
+  --font-sans: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 }
 
 html {
-  background: var(--background);
+  background: #0e0e0e;
+  scroll-behavior: smooth;
 }
 
 body {
-  min-height: 100%;
   margin: 0;
-  background:
-    radial-gradient(circle at 18% 8%, rgba(64, 115, 180, 0.22), transparent 34rem),
-    radial-gradient(circle at 82% 20%, rgba(110, 183, 255, 0.12), transparent 28rem),
-    linear-gradient(180deg, #07090d 0%, #0a0d13 45%, #07090d 100%);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  min-height: 100%;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
   color: inherit;
-  text-decoration: none;
-}
-
-button,
-a {
-  -webkit-tap-highlight-color: transparent;
 }
 
 ::selection {
-  background: rgba(110, 183, 255, 0.28);
-  color: #ffffff;
+  background: var(--ink);
+  color: var(--bg);
 }
 
-.text-balance {
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Display type: heavy, tight, slightly narrow. */
+.display {
+  font-weight: 800;
+  font-variation-settings: "wdth" 88;
+  letter-spacing: -0.035em;
+  line-height: 0.9;
   text-wrap: balance;
 }
 
-.instrument-panel {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.018)),
-    var(--panel);
-  border: 1px solid var(--line);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    0 22px 70px rgba(0, 0, 0, 0.26);
+.display-wide {
+  font-weight: 800;
+  font-variation-settings: "wdth" 100;
+  letter-spacing: -0.04em;
+  line-height: 0.88;
 }
 
-.fine-grid {
-  background-image:
-    linear-gradient(rgba(170, 190, 215, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(170, 190, 215, 0.06) 1px, transparent 1px);
-  background-size: 44px 44px;
-  mask-image: linear-gradient(to bottom, transparent, black 18%, black 74%, transparent);
+.num {
+  font-variant-numeric: tabular-nums;
 }
 
-.render-window {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 760px;
+/* Underlined inline links that fill on hover. */
+.lnk {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+  transition: background-color 120ms ease, color 120ms ease;
 }
 
-@media (max-width: 640px), (prefers-reduced-motion: reduce) {
-  .fine-grid {
-    display: none;
-  }
+.lnk:hover,
+.lnk:focus-visible {
+  background: var(--ink);
+  color: var(--bg);
+  text-decoration-color: transparent;
+}
+
+/* The fold-out story under each cabinet. */
+details.story > summary {
+  cursor: pointer;
+  list-style: none;
+  display: inline-block;
+}
+
+details.story > summary::-webkit-details-marker {
+  display: none;
+}
+
+details.story > summary::after {
+  content: " +";
+}
+
+details.story[open] > summary::after {
+  content: " \2212";
+}
+
+.story-body p + p {
+  margin-top: 0.9em;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    transition-duration: 0.001ms !important;
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
+  html {
+    scroll-behavior: auto;
   }
 }

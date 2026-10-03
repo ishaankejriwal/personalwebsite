@@ -1,134 +1,42 @@
 # DESIGN.md
 
-## Concept
+## Idea
 
-The website is an interactive “Research OS.”
+Four things Ishaan built, turned into toys. The visitor plays each one for twenty seconds and comes away knowing what the project does better than a paragraph could tell them.
 
-It should feel like entering a live system where projects, experiments, research, and ideas are running in parallel.
+## Structure
 
-The central wow moment:
+1. Intro on paper: giant name, two lines, a strip of four coloured level tiles that doubles as navigation.
+2. Cabinet 01, NeuroCore, teal. "Hold still." Balance a belt with three sensors inside a drifting target band. Sway too much and it buzzes, like the real device.
+3. Cabinet 02, GRACE, navy. "Beat the filter." Guess the next point of a noisy series, then see what a Kalman filter guessed. Five rounds, running error for both.
+4. Cabinet 03, CHAI, cream. "Test it first." No game; a four-cell grid of real numbers, one cell in red.
+5. Cabinet 04, BioDock, black. "Find the fit." Drag and rotate one of three ligands into a protein pocket until it docks.
+6. Bonus levels on paper: six short entries in a ruled grid.
+7. Contact on near-black: "That's the tour." and the email address, huge.
 
-The homepage begins as a minimal dark interface with scattered system fragments: project names, research logs, sensor traces, molecule/docking visuals, notebook snippets, and small glowing nodes.
+Each cabinet: left column has a mono kicker, the headline, one sentence, and a `<details>` fold-out labelled "The longer version". Right column is the stage, 4:3 on desktop and square on phones, inside a 3px border.
 
-As the user scrolls, these fragments assemble into a clean operating system dashboard. The hero becomes the navigation. Projects appear as living modules instead of static cards.
+## Palettes
 
-The effect should be:
-“Wait, this is not a template.”
+| Cabinet | bg | ink | accent |
+|---|---|---|---|
+| intro, bonus | #f6f4ee | #0e0e0e | #ff6a45 |
+| NeuroCore | #16c99a | #07201a | #ffd836 |
+| GRACE | #0d2c70 | #eef3ff | #ff6a45 |
+| CHAI | #f3ede2 | #141210 | #d8261f |
+| BioDock | #0f0f0f | #f2f2f2 | #c9ff3d |
+| contact | #0e0e0e | #f6f4ee | #ff6a45 |
 
-## Mood
+Flat fills only. The `dim` colour in each palette is the ink at about 30% for grids and secondary marks.
 
-Dark.
-Precise.
-Futuristic but not cyberpunk.
-Confident but not arrogant.
-Technical but human.
-Minimal but not boring.
+## Type
 
-## Visual System
-
-Background:
-- near-black
-- subtle radial gradients
-- no pure black flat emptiness
-
-Text:
-- soft white
-- muted gray for secondary text
-- one accent color only
-
-Accent:
-- electric blue or cool violet
-- use sparingly
-
-Typography:
-- large editorial hero type
-- clean sans-serif for body
-- no more than two fonts
+Bricolage Grotesque, weight 800 for display with `wdth` 88 and leading 0.9; the name uses `wdth` 100. Body at 17px. JetBrains Mono for kickers, HUDs, and the footer.
 
 ## Motion
 
-Motion should feel physical and expensive.
+Only what the games need. No scroll-driven reveals (they can leave content invisible on very tall viewports). Hover on links fills the text with ink. Level tiles lift 4px on hover.
 
-Use:
-- blur reveals
-- mask reveals
-- smooth transforms
-- scroll-linked assembly
-- subtle parallax
-- magnetic hover states
-- project modules unfolding
+## Avoid
 
-Avoid:
-- typing effects
-- bouncing
-- random particles
-- spinning icons
-- scroll hijacking
-- annoying cursor trails
-
-## Homepage Structure
-
-1. Cold open
-   - no “Hi, I’m”
-   - short mysterious line
-   - scattered fragments begin assembling
-
-2. Identity reveal
-   - name appears after initial interaction
-   - concise one-sentence positioning
-
-3. Running systems
-   - NeuroCore
-   - BioDock AI
-   - CHAI
-   - NASA SEES
-   - Skillify
-   - Experiments
-
-4. Featured project deep dives
-   - each project has a unique interaction
-
-5. Research log
-   - notebook-like layout
-   - short entries
-   - feels current, not archived
-
-6. Contact
-   - minimal
-   - no giant social icon section
-
-## Project Presentation
-
-Do not use identical cards.
-
-Each project should behave differently:
-- NeuroCore: IMU trace / brace orientation visual
-- BioDock AI: molecule/docking style reveal
-- CHAI: evaluation framework grid / document layers
-- NASA SEES: satellite/orbit/water-mass style visual
-- Skillify: marketplace/application flow visual
-
-## Components
-
-Needed:
-- AnimatedHero
-- SystemFragments
-- ProjectModule
-- ResearchLog
-- CommandPalette
-- MagneticLink
-- SectionReveal
-- ProjectDeepDive
-- ContactPanel
-
-## Anti-Patterns
-
-Never include:
-- generic portfolio cards
-- skill bars
-- huge profile headshot
-- fake terminal as main idea
-- “passionate about technology”
-- tech stack badge soup
-- cliché particle background
-- excessive glass panels
+Eyebrow labels, cards with shadows, gradients, glass, particles, 3D, mono-caps labels on every section, fake dashboards, long paragraphs above the fold, and any sentence Ishaan would not say out loud.

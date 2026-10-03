@@ -1,46 +1,27 @@
-# Personal Site Context
+# Context
 
-## Goal
+## What this is
 
-This is Ishaan Kejriwal's personal site. It should feel like a polished interactive research/startup operating system, not a generic portfolio or resume page.
+Ishaan Kejriwal's personal site. Rebuilt in October 2026 around playable toys of his real projects, after two earlier versions (a dark "research OS" and a text-heavy editorial page) both read as AI-made.
 
-The central interaction is the homepage assembly moment: loose research/project fragments converge into a dashboard of real work.
+## Why the toys
 
-## What Worked
+Ishaan's feedback on the editorial version: too much text, a traditional layout, nothing novel. The sites people remember are the ones where you do something. So each project became a small game built from its actual mechanics: the NeuroCore instability score and haptic cue, the Kalman filter from the GRACE paper, the docking pose ranking from BioDock.
 
-- Keeping one central "research OS assembling" interaction feels stronger than adding many effects.
-- The dark, restrained system UI direction works better than bright gradients, fake terminals, or generic portfolio cards.
-- Project visuals based on artifacts are a good fit: IMU traces, docking layers, CHAI eval matrix, orbit/anomaly field, marketplace flow, prototype queue.
-- Copy works best when it is concrete and evidence-based: traces, evals, prototypes, clinical docs, climate data, real users.
-- Splitting the animated hero into a small client component is important for performance. The rest of the page can stay server-rendered.
+## Facts behind the copy
 
-## What Did Not Work
+All numbers come from Ishaan's own files in his Downloads folder: Common App activity and honors drafts, the GRACE project notes and `main.tex`, the recommendation brag sheets for Dr. Anderson (CHAI) and Dr. Goldberg (CREATE-X), and the NeuroCore deck. Nothing on the page is invented.
 
-- The first homepage version hid Ishaan's name until the user had already scrolled, which made the entry feel broken.
-- The fragment animation originally faded away without clearly resolving into the dashboard, so the "wow" interaction felt decorative instead of intentional.
-- A full-page client component made the site heavier than needed.
-- The fixed background grid can cost paint time on phones, so it should stay disabled on small screens and reduced-motion.
-- Overly clever phrases like "portfolio theater" or vague "signal" language felt corny.
-- The sticky hero scroll timing can break if `useScroll` measures to `end start`; the sticky moment actually ends around `end end`.
+## Things to verify with Ishaan
 
-## Current Implementation Notes
+- GRACE: "The work is going to the AGU Fall Meeting." Confirm it is accepted and which year.
+- GRACE: the paper is "being prepared for" HESS. Update when submitted or accepted.
+- GRACE: "Most published models lose to it too" is his preferred phrasing; the paper itself compares against one published forecast (GRACE-FCast) at one month and notes that none of ten studies reports the baseline.
+- NeuroCore: five pilot clinics, $160K in funding and services, 30+ interviews, all from the October 2026 deck and honors list.
+- Game thresholds: the balance game's instability scale and cue threshold are constants at the top of `balance-game.tsx` and were tuned by feel, not against the real device.
 
-- `src/components/research-os-experience.tsx` is the mostly server-rendered page shell.
-- `src/components/assembly-hero.tsx` is the only client-heavy motion component.
-- `src/lib/site-content.ts` holds the visible project and note copy.
-- `src/components/project-visuals.tsx` holds the artifact visuals.
-- `src/app/globals.css` defines the dark theme, panels, and reduced-motion rules.
+## Known gaps
 
-## Current Known Gaps
-
-- Contact links are placeholders: `hello@example.com`, generic LinkedIn, and generic GitHub.
-- No real browser screenshot verification was possible in this session because the in-app browser bridge failed. Lint/build and local HTTP checks passed.
-- Keep future fixes targeted. Do not rewrite the whole site unless the design direction changes.
-
-## Verification Commands
-
-- `npm run lint`
-- `npm run build`
-- `npm run dev`
-
-The sandbox may fail npm commands with `EPERM: operation not permitted, lstat 'C:\Users\ishaa'`. In that case, rerun the same npm command outside the sandbox with approval.
+- No Open Graph image yet. A 1200x630 image of the intro would make shared links look right.
+- The balance game's phone-tilt mode has only been tested in a desktop browser; try it on an iPhone (it needs the permission prompt) and an Android phone.
+- Headless Chrome's `--screenshot` paints black when given an anchor URL on this page; use Playwright for captures (see AGENTS.md).

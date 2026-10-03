@@ -2,99 +2,49 @@
 
 ## Project
 
-This is a personal website for Ishaan Kejriwal.
+Personal website for Ishaan Kejriwal (Johns Creek High School, Class of 2027). The audience is recruiters, admissions readers, and founders who give it ten seconds, then maybe two minutes.
 
-The goal is not to build a generic portfolio. The goal is to build a memorable interactive personal website with a real wow factor while staying tasteful, fast, and usable.
-
-The site should feel like a polished interactive research/startup operating system, not a resume page.
+The concept: four things he built, turned into small playable toys. Each project is a full-screen "cabinet" with its own flat colour, one headline, one sentence, a fold-out with the longer story, and a stage that holds a game built from the real work. Visitors do things instead of reading.
 
 ## Stack
 
-- Next.js App Router
-- TypeScript
-- Tailwind CSS
-- Framer Motion for UI motion
-- Three.js / React Three Fiber only if it meaningfully improves the central interaction
-- Avoid unnecessary dependencies
+- Next.js App Router, TypeScript, Tailwind CSS v4
+- Two webfonts via `next/font`: Bricolage Grotesque (display and body) and JetBrains Mono (HUD and small labels)
+- No animation or UI libraries. Games are vanilla canvas in client components, lazy-loaded when their cabinet is near the viewport.
+- Do not add dependencies without a reason written down.
 
 ## Commands
 
-- Run development server: `npm run dev`
-- Build: `npm run build`
-- Lint: `npm run lint`
+- `npm run dev`
+- `npm run build`
+- `npm run lint`
 
-Always run `npm run lint` and `npm run build` before calling the work done.
+Run lint and build before calling anything done. Never add Co-Authored-By or "generated with" lines to commits.
 
-## Design Taste
+## Where things live
 
-Prioritize:
-- memorable interaction design
-- cinematic scrolling
-- restrained dark-first visual system
-- editorial typography
-- fast hover states
-- smooth transitions
-- strong project storytelling
+- `src/app/page.tsx` orders the cabinets.
+- `src/lib/cabinets.ts` holds the palettes and the level list used by the intro strip.
+- `src/components/cabinet.tsx` is the shared cabinet layout; `stories.tsx` holds the fold-out copy.
+- `src/components/games/*.tsx` are the three games. They share one contract: `({ colors }) => JSX`, root fills its container, canvas plus a small DOM HUD, `ResizeObserver` sizing, `requestAnimationFrame` only while on screen and the tab is visible, `touch-action: none` only during a round, reduced motion means no idle animation.
+- `src/components/game-slot.tsx` lazy-loads a game with an `IntersectionObserver`.
 
-Avoid:
-- skill bars
-- generic project cards
-- “Hi, I’m...” hero
-- fake terminal clichés
-- random particles
-- excessive glassmorphism
-- rainbow gradients
-- floating icons everywhere
-- gimmicky 3D that hurts usability
-- AI-generated looking illustrations
+## Voice
 
-## Core Interaction Rule
+Copy is first person, plain, short, and specific. Every number is checkable against Ishaan's resumes, Common App drafts, and paper draft.
 
-The website should have one central wow interaction.
+Never write em or en dashes, "not X but Y" contrasts, uppercase tracked eyebrow labels, filler words like signal, journey, landscape, or invented metrics. Headlines are short imperatives ("Hold still.", "Beat the filter."). HUD strings stay under 40 characters.
 
-Do not add many random effects.
+## Design
 
-Every animation should support the central concept.
+- One flat colour per cabinet, no gradients, no glows, no shadows, 3px ink borders. Intro and bonus section on paper, contact on near-black.
+- Display type is Bricolage at weight 800, slightly narrow, tight leading. Sentence case.
+- Each game is a sharp instrument, not a casual game: 2px lines, accent colour for the one thing that matters.
+- Mobile: single column, square stage, 20px gutters, nothing wider than the viewport. Games must not block page scrolling outside a round.
+- Respect `prefers-reduced-motion`.
 
-The central interaction should feel original, polished, and connected to the idea that Ishaan builds AI, hardware, research, and startup systems.
+## Definition of done
 
-## Content Priorities
-
-Main sections:
-- Hero / entry moment
-- Current work
-- Projects
-- Research
-- Writing / notes
-- Contact
-
-Important projects:
-- NeuroCore
-- BioDock AI
-- CHAI healthcare AI evaluation work
-- NASA SEES / GRACE research
-- Skillify
-- GTRI / applied AI projects
-
-Do not over-explain awards. Embed them naturally inside project stories.
-
-## Engineering Rules
-
-- Keep components small.
-- Use semantic HTML.
-- Make mobile responsive.
-- Respect prefers-reduced-motion.
-- Keep animations GPU-friendly.
-- Do not break accessibility.
-- Do not add dependencies without explaining why.
-- Use realistic placeholder content when final copy is unknown.
-
-## Definition of Done
-
-A task is only done when:
-- the site runs locally
-- lint passes
-- build passes
-- the interaction feels intentional
-- the UI does not look like a template
-- mobile layout is acceptable
+- runs locally, lint and build pass
+- checked at 1440 and 390 widths (Playwright: `npx playwright screenshot --channel=chrome --full-page --viewport-size=1440,900 --wait-for-timeout=6000 http://localhost:3000 out.png`; use an anchor like `/#grace` to load a specific game)
+- every visible string re-read for the voice rules above
