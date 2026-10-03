@@ -28,7 +28,7 @@ type Pt = { x: number; y: number };
 type Phase = "idle" | "play" | "done";
 // Normalized puzzle: protein radius 1 centred at the origin; pocket and ligands are local to the pocket centre.
 type Shape = { blob: Pt[]; pocketC: Pt; pocket: Pt[]; ligs: Pt[][]; samples: Pt[][] };
-type Ligand = { poly: Pt[]; samples: Pt[]; hitR: number; pos: Pt; rot: number; best: number; docked: boolean };
+type Ligand = { poly: Pt[]; path: Path2D; atoms: Path2D; samples: Pt[]; hitR: number; pos: Pt; rot: number; best: number; docked: boolean };
 type Scene = { shape: Shape; w: number; h: number; blob: Pt[]; pocket: Pt[]; pocketC: Pt; ligands: Ligand[] };
 
 function mulberry32(seed: number) {
@@ -58,6 +58,14 @@ function area(poly: Pt[]): number {
 }
 
 const scalePoly = (poly: Pt[], k: number): Pt[] => poly.map((p) => ({ x: p.x * k, y: p.y * k }));
+
+function pathOf(poly: Pt[]): Path2D {
+  const p = new Path2D();
+  poly.forEach((v, i) => (i ? p.lineTo(v.x, v.y) : p.moveTo(v.x, v.y)));
+  p.closePath();
+  return p;
+}
+
 
 function samplePoly(poly: Pt[], rnd: () => number, n: number): Pt[] {
   const xs = poly.map((p) => p.x), ys = poly.map((p) => p.y);
@@ -146,7 +154,12 @@ function buildScene(shape: Shape, w: number, h: number, prev: Scene | null): Sce
     const pos =
       prev && old ? (old.docked ? pocketC : { x: (old.pos.x * w) / prev.w, y: (old.pos.y * h) / prev.h }) : homes[i];
     const hitR = Math.max(...poly.map((p) => Math.hypot(p.x, p.y))) + 14;
-    return { poly, samples: scalePoly(shape.samples[i], R), hitR, pos, rot: old?.rot ?? 0, best: old?.best ?? 0, docked: old?.docked ?? false };
+    const atoms = new Path2D();
+    for (const v of poly) {
+      atoms.moveTo(v.x + 3, v.y);
+      atoms.arc(v.x, v.y, 3, 0, TAU);
+    }
+    return { poly, path: pathOf(poly), atoms, samples: scalePoly(shape.samples[i], R), hitR, pos, rot: old?.rot ?? 0, best: old?.best ?? 0, docked: old?.docked ?? false };
   });
   const pocket = shape.pocket.map((p) => ({ x: pocketC.x + p.x * R, y: pocketC.y + p.y * R }));
   return { shape, w, h, blob: shape.blob.map(toPx), pocket, pocketC, ligands };
@@ -189,23 +202,48 @@ function release(scene: Scene, i: number): number {
   return f;
 }
 
-function pathOf(poly: Pt[]): Path2D {
-  const p = new Path2D();
-  poly.forEach((v, i) => (i ? p.lineTo(v.x, v.y) : p.moveTo(v.x, v.y)));
-  p.closePath();
-  return p;
+// The protein body never moves, so it is rendered once per size/state into an
+// offscreen layer and blitted each frame. The dotted fill is a repeating 8px tile.
+type Layer = { canvas: HTMLCanvasElement; key: string };
+
+function dotTile(c: GameColors, dpr: number): HTMLCanvasElement {
+  const t = document.createElement("canvas");
+  t.width = t.height = Math.round(8 * dpr);
+  const g = t.getContext("2d");
+  if (g) {
+    g.fillStyle = c.dim;
+    g.fillRect(0, 0, Math.round(2 * dpr), Math.round(2 * dpr));
+  }
+  return t;
 }
 
-function drawScene(ctx: CanvasRenderingContext2D, scene: Scene, c: GameColors, held: number, done: boolean, pulse: number) {
+function renderStatic(layer: Layer, scene: Scene, c: GameColors, done: boolean, pulse: number, dpr: number) {
   const { w, h } = scene;
+  const key = `${w}x${h}|${dpr}|${done}|${pulse.toFixed(2)}|${c.bg}|${scene.pocketC.x}`;
+  if (layer.key === key) return;
+  layer.key = key;
+  const cv = layer.canvas;
+  if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) {
+    cv.width = Math.round(w * dpr);
+    cv.height = Math.round(h * dpr);
+  }
+  const ctx = cv.getContext("2d");
+  if (!ctx) return;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.fillStyle = c.bg;
   ctx.fillRect(0, 0, w, h);
   const blobPath = pathOf(scene.blob), pocketPath = pathOf(scene.pocket);
-  // Body: dotted interior clipped to the blob, pocket cleared, pocket outline only inside the body.
   ctx.save();
   ctx.clip(blobPath);
-  ctx.fillStyle = c.dim;
-  for (let x = 0; x < w; x += 8) for (let y = HUD_TOP; y < h; y += 8) ctx.fillRect(x, y, 2, 2);
+  const pattern = ctx.createPattern(dotTile(c, dpr), "repeat");
+  if (pattern) {
+    const m = new DOMMatrix();
+    m.a = 1 / dpr;
+    m.d = 1 / dpr;
+    pattern.setTransform(m);
+    ctx.fillStyle = pattern;
+    ctx.fillRect(0, HUD_TOP, w, h - HUD_TOP);
+  }
   ctx.fillStyle = c.bg;
   ctx.fill(pocketPath);
   ctx.lineJoin = "miter";
@@ -213,7 +251,6 @@ function drawScene(ctx: CanvasRenderingContext2D, scene: Scene, c: GameColors, h
   ctx.strokeStyle = done ? c.accent : c.ink;
   ctx.stroke(pocketPath);
   ctx.restore();
-  // Outline everywhere except across the pocket mouth.
   ctx.save();
   const outside = new Path2D();
   outside.rect(0, 0, w, h);
@@ -224,7 +261,11 @@ function drawScene(ctx: CanvasRenderingContext2D, scene: Scene, c: GameColors, h
   ctx.strokeStyle = c.ink;
   ctx.stroke(blobPath);
   ctx.restore();
+}
 
+function drawScene(ctx: CanvasRenderingContext2D, layer: Layer, scene: Scene, c: GameColors, held: number) {
+  const { w, h } = scene;
+  ctx.drawImage(layer.canvas, 0, 0, w, h);
   const order = scene.ligands.map((_, i) => i).sort((a, b) => (a === held ? 1 : b === held ? -1 : 0));
   ctx.font = "bold 11px ui-monospace, SFMono-Regular, Menlo, monospace";
   ctx.textAlign = "center";
@@ -238,10 +279,8 @@ function drawScene(ctx: CanvasRenderingContext2D, scene: Scene, c: GameColors, h
     ctx.lineWidth = 2;
     ctx.strokeStyle = col;
     ctx.fillStyle = col;
-    ctx.stroke(pathOf(l.poly));
-    const atoms = new Path2D();
-    for (const v of l.poly) { atoms.moveTo(v.x + 3, v.y); atoms.arc(v.x, v.y, 3, 0, TAU); }
-    ctx.fill(atoms);
+    ctx.stroke(l.path);
+    ctx.fill(l.atoms);
     ctx.restore();
     ctx.fillStyle = i === held ? c.accent : c.dim;
     ctx.fillText(LETTERS[i], l.pos.x, l.pos.y);
@@ -261,6 +300,10 @@ export function DockGame({ colors }: { colors: GameColors }): React.JSX.Element 
   const reducedRef = useRef(false);
   const rafRef = useRef(0);
   const activeRef = useRef({ onScreen: false, visible: true });
+  const layerRef = useRef<Layer | null>(null);
+  const dprRef = useRef(1);
+  const dirtyRef = useRef(true);
+  const hudRef = useRef({ fit: "", rank: "" });
 
   const [phase, setPhaseState] = useState<Phase>("idle");
   const [fitText, setFitText] = useState("fit 0.00");
@@ -274,13 +317,28 @@ export function DockGame({ colors }: { colors: GameColors }): React.JSX.Element 
   const draw = useCallback(() => {
     const ctx = canvasRef.current?.getContext("2d"), scene = sceneRef.current;
     if (!ctx || !scene) return;
+    dirtyRef.current = false;
+    if (!layerRef.current) layerRef.current = { canvas: document.createElement("canvas"), key: "" };
     const pulse = reducedRef.current || pulseRef.current > PULSE_S ? 0 : Math.sin((Math.PI * pulseRef.current) / PULSE_S);
-    drawScene(ctx, scene, colorsRef.current, heldRef.current, phaseRef.current === "done", pulse);
+    renderStatic(layerRef.current, scene, colorsRef.current, phaseRef.current === "done", pulse, dprRef.current);
+    drawScene(ctx, layerRef.current, scene, colorsRef.current, heldRef.current);
     const cur = scene.ligands[curRef.current];
     const f = cur.docked ? cur.best : fitOf(cur.samples, cur.pos, cur.rot, scene.pocket, scene.blob);
-    setFitText(`fit ${f.toFixed(2)}`);
+    const fit = `fit ${f.toFixed(2)}`;
     const ranked = scene.ligands.map((l, i) => ({ l, i })).sort((a, b) => b.l.best - a.l.best);
-    setRankText(ranked.map(({ l, i }) => `${LETTERS[i]} ${l.best.toFixed(2)}`).join("  "));
+    const rank = ranked.map(({ l, i }) => `${LETTERS[i]} ${l.best.toFixed(2)}`).join("  ");
+    // Only touch React state when the HUD text actually changes.
+    if (fit !== hudRef.current.fit) {
+      hudRef.current.fit = fit;
+      setFitText(fit);
+    }
+    if (rank !== hudRef.current.rank) {
+      hudRef.current.rank = rank;
+      setRankText(rank);
+    }
+  }, []);
+  const invalidate = useCallback(() => {
+    dirtyRef.current = true;
   }, []);
 
   // Canvas sizing, intersection + visibility gating, fixed-step loop, wheel rotation.
@@ -294,6 +352,7 @@ export function DockGame({ colors }: { colors: GameColors }): React.JSX.Element 
       const { width: w, height: h } = entry.contentRect;
       if (!w || !h) return;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dprRef.current = dpr;
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);
       canvas.getContext("2d")?.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -309,11 +368,16 @@ export function DockGame({ colors }: { colors: GameColors }): React.JSX.Element 
       last = now;
       while (acc >= STEP) {
         acc -= STEP;
-        if (phaseRef.current === "idle" && !reducedRef.current)
+        if (phaseRef.current === "idle" && !reducedRef.current) {
           for (const l of sceneRef.current?.ligands ?? []) l.rot += IDLE_SPIN * STEP;
-        if (phaseRef.current === "done") pulseRef.current += STEP;
+          dirtyRef.current = true;
+        }
+        if (phaseRef.current === "done" && pulseRef.current <= PULSE_S) {
+          pulseRef.current += STEP;
+          dirtyRef.current = true;
+        }
       }
-      draw();
+      if (dirtyRef.current) draw();
       rafRef.current = requestAnimationFrame(frame);
     };
     const sync = () => {
@@ -333,6 +397,7 @@ export function DockGame({ colors }: { colors: GameColors }): React.JSX.Element 
       e.preventDefault();
       const d = Math.max(-60, Math.min(60, e.deltaY * (e.deltaMode ? 16 : 1)));
       rotateLigand(sceneRef.current, curRef.current, (d / 60) * ROT_STEP);
+      dirtyRef.current = true;
     };
     canvas.addEventListener("wheel", onWheel, { passive: false });
     return () => {
@@ -345,7 +410,11 @@ export function DockGame({ colors }: { colors: GameColors }): React.JSX.Element 
     };
   }, [draw]);
 
-  const rotateCur = (d: number) => { if (phaseRef.current === "play") rotateLigand(sceneRef.current, curRef.current, d); };
+  const rotateCur = (d: number) => {
+    if (phaseRef.current !== "play") return;
+    rotateLigand(sceneRef.current, curRef.current, d);
+    invalidate();
+  };
 
   const start = () => {
     if (sceneRef.current) sceneRef.current = newRound(sceneRef.current);
@@ -370,6 +439,7 @@ export function DockGame({ colors }: { colors: GameColors }): React.JSX.Element 
     heldRef.current = i;
     curRef.current = i;
     grabRef.current = { x: scene.ligands[i].pos.x - p.x, y: scene.ligands[i].pos.y - p.y };
+    invalidate();
     e.currentTarget.setPointerCapture(e.pointerId);
     e.currentTarget.focus({ preventScroll: true });
   };
@@ -379,11 +449,13 @@ export function DockGame({ colors }: { colors: GameColors }): React.JSX.Element 
     if (!scene || heldRef.current < 0) return;
     const p = toLocal(e);
     moveLigand(scene, heldRef.current, { x: p.x + grabRef.current.x, y: p.y + grabRef.current.y });
+    invalidate();
   };
 
   const onPointerUp = () => {
     const scene = sceneRef.current, i = heldRef.current;
     heldRef.current = -1;
+    invalidate();
     if (!scene || i < 0) return;
     const f = release(scene, i);
     if (scene.ligands[i].docked) {
