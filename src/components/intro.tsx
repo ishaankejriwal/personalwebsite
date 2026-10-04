@@ -27,7 +27,7 @@ export function Intro() {
             Four things I built, turned into toys. Scroll down and play them.
           </p>
           <p className="max-w-md text-base leading-relaxed md:justify-self-end">
-            Class of 2027. CTO of NeuroCore, a sensor belt for kids with cerebral palsy. Intern at
+            Class of 2027. Former NASA Intern. CTO of NeuroCore, a sensor belt for kids with cerebral palsy. Intern at
             the Coalition for Health AI. Writing a paper on forecasting water from NASA&rsquo;s
             GRACE satellites.{" "}
             <a className="lnk" href="https://github.com/ishaankejriwal" rel="me noreferrer">
